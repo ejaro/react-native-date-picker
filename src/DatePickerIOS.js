@@ -25,9 +25,9 @@ export default class DatePickerIOS extends React.Component {
     }
   }
 
-  _onConfirm = ({ timestamp }) => {
+  _onConfirm = ({ timestamp, dateStr }) => {
     this.isClosing = true
-    this.props.onConfirm(new Date(timestamp))
+    this.props.onConfirm(new Date(timestamp), dateStr)
   }
 
   _onCancel = () => {

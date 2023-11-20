@@ -42,6 +42,11 @@ export interface DatePickerProps extends ViewProps {
   mode?: 'date' | 'time' | 'datetime'
 
   /**
+   * The type of the calendar
+   */
+  calendarType?: "hijri" | "gregorian"
+
+  /**
    * Date change handler.
    *
    * This is called when the user changes the date or time in the UI.
@@ -87,7 +92,7 @@ export interface DatePickerProps extends ViewProps {
   open?: boolean
 
   /** Modal callback invoked when the user presses the confirm button */
-  onConfirm?: (date: Date) => void
+  onConfirm?: (date: Date, dateStr: string) => void
 
   /** Modal callback invoked when user presses the cancel button or closes the modal by a press outside  */
   onCancel?: () => void

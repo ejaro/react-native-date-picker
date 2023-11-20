@@ -38,6 +38,7 @@ RCT_EXPORT_METHOD(removeListeners : (NSInteger)count) {
 RCT_EXPORT_VIEW_PROPERTY(text, NSString)
 RCT_EXPORT_VIEW_PROPERTY(date, NSDate)
 RCT_EXPORT_VIEW_PROPERTY(locale, NSLocale)
+RCT_EXPORT_VIEW_PROPERTY(calendarType, NSString)
 RCT_EXPORT_VIEW_PROPERTY(minimumDate, NSDate)
 RCT_EXPORT_VIEW_PROPERTY(maximumDate, NSDate)
 RCT_EXPORT_VIEW_PROPERTY(minuteInterval, NSInteger)
@@ -111,6 +112,20 @@ RCT_EXPORT_METHOD(openPicker:(NSDictionary *) props
         
         NSLocale * locale = [RCTConvert NSLocale:[props objectForKey:@"locale"]];
         if(locale) [picker setLocale:locale];
+        
+        NSString * calendarType = [RCTConvert NSString:[props objectForKey:@"calendarType"]];
+        NSCalendar * calendar;
+        if ([calendarType isEqual: @"hijri"]) {
+            calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierIslamic];
+        } else {
+            calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        }
+        NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:NSDateFormatterShortStyle];
+        [formatter setTimeStyle:NSDateFormatterNoStyle];
+        [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+        [formatter setCalendar:calendar];
+        [picker setCalendar:calendar];
 
         int minuteInterval = [RCTConvert int:[props objectForKey:@"minuteInterval"]];
         [picker setMinuteInterval:minuteInterval];
@@ -132,7 +147,7 @@ RCT_EXPORT_METHOD(openPicker:(NSDictionary *) props
         [alertView addSubview:picker];
         
         UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:confirmText style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            onConfirm(@[@{ @"timestamp": @(picker.date.timeIntervalSince1970 * 1000.0) }]);
+            onConfirm(@[@{ @"timestamp": @(picker.date.timeIntervalSince1970 * 1000.0), @"dateStr": [formatter stringFromDate:picker.date] }]);
         }];
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelText style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             onCancel(@[]);
