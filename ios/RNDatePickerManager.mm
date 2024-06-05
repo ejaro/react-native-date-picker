@@ -116,7 +116,7 @@ RCT_EXPORT_METHOD(openPicker:(NSDictionary *) props
         NSString * calendarType = [RCTConvert NSString:[props objectForKey:@"calendarType"]];
         NSCalendar * calendar;
         if ([calendarType isEqual: @"hijri"]) {
-            calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierIslamic];
+            calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierIslamicUmmAlQura];
         } else {
             calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         }
